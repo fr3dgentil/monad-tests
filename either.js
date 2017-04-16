@@ -69,3 +69,4 @@ class Right extends Either {
 }
 
 console.log(Either.fromNullable('hehe ').chain(x => x+'r32 ').chain(x=>x+'43'));
+// Right { _value: 'hehe r32 43' }
