@@ -18,7 +18,6 @@ class Maybe {
 		return false;
 	}
 }
-
 class Just extends Maybe {
 	constructor(value) {
 		super();
@@ -43,7 +42,6 @@ class Just extends Maybe {
 		return `Maybe.Just(${this.value})`;
 	}
 }
-
 class Nothing extends Maybe {
 	map() {
 		return this;
@@ -68,3 +66,4 @@ class Nothing extends Maybe {
 var isEven = x => x % 2 === 0 ? true : false;
 
 console.log( Maybe.of(1).filter(isEven).map(x => ++x).getOrElse(8787878) );
+// 8787878
