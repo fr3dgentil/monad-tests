@@ -68,3 +68,4 @@ class Nothing extends Maybe {
 var isEven = x => x % 2 === 0 ? true : false;
 
 console.log( Maybe.of(1).filter(isEven).map(x => ++x).getOrElse(8787878) );
+// 8787878
