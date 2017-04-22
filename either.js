@@ -1,3 +1,14 @@
+var compose = (...fns) => function(val) {
+	function r(fns) {
+		if (!fns.length) return val;
+		else return fns[0](r(fns.slice(1)));
+	}
+	return r(fns);
+}
+
+var a = compose(x => x + 1, x => x + 1);
+// console.log(a(2));
+
 class Either {
 	constructor(value) {
 		this._value = value;
@@ -12,15 +23,15 @@ class Either {
 		return new Right(a);
 	}
 	static fromNullable(val) {
-		return val !== null ? Either.right(val) : Either.left(val);
+		return val ? Either.right(val) : Either.left(val);
 	}
 	static of (a) {
-		return right(a);
+		return Either.right(a);
 	}
 }
 class Left extends Either {
 	map(_) {
-		return this; // noop
+		return this;
 	}
 	get value() {
 		throw new TypeError("Can't extract the value of a Left.");
@@ -29,15 +40,15 @@ class Left extends Either {
 		return other;
 	}
 	orElse(f) {
-		return f(this.value);
+		return f(this._value);
 	}
-	chain(f) {
+	chain(_) {
 		return this;
 	}
 	getOrElseThrow(a) {
 		throw new Error(a);
 	}
-	filter(f) {
+	filter(_) {
 		return this;
 	}
 	toString() {
@@ -48,7 +59,7 @@ class Right extends Either {
 	map(f) {
 		return Either.of(f(this.value));
 	}
-	getOrElse(other) {
+	getOrElse(_) {
 		return this.value;
 	}
 	orElse(_) {
@@ -61,12 +72,21 @@ class Right extends Either {
 		return this.value;
 	}
 	filter(f) {
-		return Either.fromNullable(f(this.value) ? this.value : null);
+		return f(this.value) ? Either.right(this.value) : Either.left(this.value);
 	}
 	toString() {
 		return `Either.Right(${this.value})`;
 	}
 }
 
-console.log(Either.fromNullable('hehe ').chain(x => x+'r32 ').chain(x=>x+'43'));
+var consoleLog = message => console.log(message);
+
+var isEven = x => x % 2 === 0 ? true : false;
+
+
+// console.log(Either.fromNullable('hehe ').chain(x => x+'r32 ').chain(x=>x+'43'));
 // Right { _value: 'hehe r32 43' }
+
+console.log( Either.of(8).filter(isEven).map(x=>x+1).orElse(x=>x + ' is not even') );
+
+// console.log( Either.left(8).map() );
