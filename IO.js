@@ -1,3 +1,5 @@
+// IO operations in a referentially transparent-ish way
+
 class IO {
 	constructor(effect){
 		this.effect = effect;
@@ -13,3 +15,13 @@ class IO {
 	}
 	run(){return this.effect();}
 }
+
+// Usage exemple:
+
+var read = qS => () => document.querySelector(qS).innerHTML;
+var write = qS => val => document.querySelector(qS).innerHTML = val;
+
+var readTitle = read('#title');
+var writeTitle = write('#title');
+
+IO.from(readTitle).map(_.startCase).map(writeTitle).run();
