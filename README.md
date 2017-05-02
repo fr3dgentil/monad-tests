@@ -1,4 +1,4 @@
-# monadMaybe
+# Monad tests
 
 Hi,
 If you stumble on this, it's simply a test for me to get acquainted with Github.
