@@ -57,7 +57,7 @@ class Left extends Either {
 }
 class Right extends Either {
 	map(f) {
-		return Either.of(f(this.value));
+		return Either.fromNullable(f(this.value));
 	}
 	getOrElse(_) {
 		return this.value;
@@ -66,7 +66,7 @@ class Right extends Either {
 		return this;
 	}
 	chain(f) {
-		return Either.fromNullable(f(this.value));
+		return f(this.value);
 	}
 	getOrElseThrow(_) {
 		return this.value;
@@ -79,14 +79,22 @@ class Right extends Either {
 	}
 }
 
-var consoleLog = message => console.log(message);
+var cl = message => console.log(message);
 
 var isEven = x => x % 2 === 0 ? true : false;
 
+var getDb = x => x === 1 ? Either.right(2) : Either.left('Not found');
 
-// console.log(Either.fromNullable('hehe ').chain(x => x+'r32 ').chain(x=>x+'43'));
-// Right { _value: 'hehe r32 43' }
+cl(
+	Either.of(1)
+	.chain(getDb)
+	.filter(isEven)
+	.map(x=>x+1)
+	.orElse(x=>x + ' is not even')
+);
 
-console.log( Either.of(8).filter(isEven).map(x=>x+1).orElse(x=>x + ' is not even') );
+var map = f => container => container.map(f);
 
-// console.log( Either.left(8).map() );
+var plusOne = map(x=>++x);
+
+cl( plusOne([1,2,3]) );
